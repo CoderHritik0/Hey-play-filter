@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>HeyPlay - Classes</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" />
+    <link rel="stylesheet" href="style.css" />
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous"></script>
+    <script src="script.js"></script>
+  </head>
+  <body>
+    <header>
+      <nav class="navbar fixed-top">
+        <div class="container-fluid">
+          <span class="navbar-brand mb-0 h1"><img src="/src/logo.png" width="150" alt="Logo" /></span>
+        </div>
+      </nav>
+    </header>
+    <main>
+      <div class="d-flex main-content">
+        <div class="content m-3">
+          <div class="contain-filter-head d-flex justify-content-between w-100">
+            <h5>Filters</h5>
+            <p class="filter-reset">Reset Filters</p>
+          </div>
+          <div class="filter-list">
+            <button>Age</button>
+            <button>Category</button>
+            <button>Day</button>
+            <button>Class Type</button>
+          </div>
+          <hr />
+          <div class="class-container">
+            <div class="sort-container row">
+              <div class="heading col-sm-6">
+                <h6>Activites</h6>
+                <hr />
+              </div>
+              <!-- <div class="col-sm-6"></div> -->
+              <div class="col-sm-6 text-end mt-2">
+                <select name="sorting" id="sortBy" title="sort">
+                  <option value="recommended">Sort by : Recommended</option>
+                  <option value="highest">Sort by : Rating Highest</option>
+                  <option value="lowest">Sort by : Rating Lowest</option>
+                </select>
+              </div>
+            </div>
+            <div class="classes my-4">
+              <div class="card mb-3">
+                <div class="row g-0">
+                  <div class="col-lg-3 col-xl-2 align-items-center d-flex">
+                    <img src="/src/1.jpg" class="img-fluid" alt="..." />
+                  </div>
+                  <div class="col-lg-9 col-xl-8">
+                    <div class="card-body">
+                      <p class="class-name mb-1"><small class="text-body-secondary">Classcapades</small></p>
+                      <h5 class="card-title mb-2">BRP - Budding Readers' Programme (Grade 1)</h5>
+                      <div class="row mb-2">
+                        <div class="col-md-6">
+                          <p class="card-text address mb-1 border-end">Khar West, Mumbai</p>
+                          <p class="card-text border-end">Tue, Thu, Fri</p>
+                        </div>
+                        <div class="col-md-6">
+                          <p class="card-text mb-1">Age: - 5yrs - 7yrs</p>
+                          <p class="card-text mb-0">Jun 13, 2023 - Jun 15, 2024</p>
+                        </div>
+                      </div>
+                      <div class="class-category">
+                        <span class="badge rounded-pill">Language</span>
+                        <span class="extra-category">+1</span>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="col-lg-12 col-xl-2">
+                    <div class="card-body h-100 d-flex flex-column justify-content-between text-end">
+                      <div class="rating">
+                        <i class="bi bi-star-fill"></i>
+                        <i class="bi bi-star-fill"></i>
+                        <i class="bi bi-star"></i>
+                        <i class="bi bi-star"></i>
+                        <i class="bi bi-star"></i>
+                      </div>
+                      <div class="class-type">
+                        <p>weekly</p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="card mb-3">
+                <div class="row g-0">
+                  <div class="col-md-3">
+                    <img src="/src/1.jpg" class="img-fluid rounded-start" alt="..." />
+                  </div>
+                  <div class="col-md-8">
+                    <div class="card-body">
+                      <h5 class="card-title">Card title</h5>
+                      <p class="card-text">This is a wider card with supporting text below as a natural lead-in to additional content. This content is a little bit longer.</p>
+                      <p class="card-text"><small class="text-body-secondary">Last updated 3 mins ago</small></p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="card mb-3">
+                <div class="row g-0">
+                  <div class="col-md-3">
+                    <img src="/src/1.jpg" class="img-fluid rounded-start" alt="..." />
+                  </div>
+                  <div class="col-md-8">
+                    <div class="card-body">
+                      <h5 class="card-title">Card title</h5>
+                      <p class="card-text">This is a wider card with supporting text below as a natural lead-in to additional content. This content is a little bit longer.</p>
+                      <p class="card-text"><small class="text-body-secondary">Last updated 3 mins ago</small></p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="map">
+          <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d241317.14571418945!2d72.71637348622278!3d19.08217751281334!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3be7c6306644edc1%3A0x5da4ed8f8d648c69!2sMumbai%2C%20Maharashtra!5e0!3m2!1sen!2sin!4v1704951544550!5m2!1sen!2sin" style="border: 0" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+        </div>
+      </div>
+    </main>
+    <footer>
+      <div class="container-fluid">
+        <div class="footer">
+          <div class="container">
+            <div class="row">
+              <div class="col-md-3">
+                <h4>Parents</h4>
+                <ul>
+                  <li>Home</li>
+                  <li>Online Classes</li>
+                  <li>In Person Classes in Mumbai</li>
+                  <li>Music classes in Mumbai</li>
+                </ul>
+              </div>
+              <div class="col-md-3">
+                <h4>Hey Play</h4>
+                <ul>
+                  <li>About Us</li>
+                  <li>Get in Touch</li>
+                  <li>Privacy Policy</li>
+                  <li>Terms of Use</li>
+                </ul>
+              </div>
+              <div class="col-md-3">
+                <h4>Educators</h4>
+                <ul>
+                  <li>Claim Listing</li>
+                  <li>List with Us</li>
+                </ul>
+              </div>
+              <div class="col-md-3"></div>
+              <h4>Follow Us</h4>
+              <p>Stay connected with us and know the latest updates about our services through various social media</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </footer>
+  </body>
+</html>

@@ -27,17 +27,16 @@
             <p class="filter-reset">Reset Filters</p>
           </div>
           <div class="filter-list">
-            <button>Age</button>
-            <button>Category</button>
-            <button>Day</button>
-            <button>Class Type</button>
+            <button onclick="updateModal('age')" data-bs-toggle="modal" data-bs-target="#filterModal">Age</button>
+            <button onclick="updateModal('category')" data-bs-toggle="modal" data-bs-target="#filterModal">Category</button>
+            <button onclick="updateModal('day')" data-bs-toggle="modal" data-bs-target="#filterModal">Day</button>
+            <button onclick="updateModal('class Type')" data-bs-toggle="modal" data-bs-target="#filterModal">Class Type</button>
           </div>
           <hr />
           <div class="class-container">
             <div class="sort-container row">
               <div class="heading col-sm-6">
                 <h6>Activites</h6>
-                <hr />
               </div>
               <!-- <div class="col-sm-6"></div> -->
               <div class="col-sm-6 text-end mt-2">
@@ -122,7 +121,8 @@
           </div>
         </div>
         <div class="map">
-          <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d241317.14571418945!2d72.71637348622278!3d19.08217751281334!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3be7c6306644edc1%3A0x5da4ed8f8d648c69!2sMumbai%2C%20Maharashtra!5e0!3m2!1sen!2sin!4v1704951544550!5m2!1sen!2sin" style="border: 0" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+          <img src="" alt="Map" />
+          <!-- <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d241317.14571418945!2d72.71637348622278!3d19.08217751281334!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3be7c6306644edc1%3A0x5da4ed8f8d648c69!2sMumbai%2C%20Maharashtra!5e0!3m2!1sen!2sin!4v1704951544550!5m2!1sen!2sin" style="border: 0" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe> -->
         </div>
       </div>
     </main>
@@ -164,5 +164,27 @@
         </div>
       </div>
     </footer>
+
+    <div class="modal fade" id="filterModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+      <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h1 class="modal-title fs-5" id="exampleModalLabel">Select <span id="modalName"></span></h1>
+            <button type="button" class="btn-close p-1" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <div class="modal-body" id="modal-body"></div>
+          <div class="modal-footer d-inline">
+            <div class="row">
+              <div class="col-6 text-center">
+                <button type="button" onclick="clearFilter()" class="clear-modal-btn">Clear</button>
+              </div>
+              <div class="col-6 text-center">
+                <button type="button" onclick="applyFilter()" class="save-modal-btn">Submit</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
   </body>
 </html>

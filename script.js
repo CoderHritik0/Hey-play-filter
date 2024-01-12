@@ -356,7 +356,7 @@ function getDaysString(daysArray) {
 function getAgeString(months) {
   // let ageString = (start / 12 >= 1) ? (start % 12 === 0) ? (` - ${start/12}yrs`) :(` - ${Math.floor(start/12)}yrs ${start%12}Mo` ): ` - ${start%12}Mo`;
   // ageString += (end / 12 >= 1) ? (end % 12 === 0) ? (` - ${end/12}yrs`) :(` - ${Math.floor(end/12)}yrs ${end%12}Mo` ): ` - ${end%12}Mo`;
-  let ageString = months / 12 >= 1 ? (months % 12 === 0 ? ` - ${months / 12}yrs` : ` - ${Math.floor(months / 12)}yrs ${months % 12}Mo`) : ` - ${months % 12}Mo`;
+  let ageString = months / 12 >= 1 ? (months % 12 === 0 ? ` ${months / 12}yrs` : ` ${Math.floor(months / 12)}yrs ${months % 12}Mo`) : ` ${months % 12}Mo`;
   return ageString;
 }
 
@@ -376,3 +376,274 @@ function giveRating(stars) {
   }
   return starHtml;
 }
+
+function updateModal(flag) {
+  document.getElementById("modalName").innerText = capitalize(flag);
+  document.getElementById("filterModal").setAttribute("data-flag", flag);
+  switch (flag) {
+    case "age":
+      getModalForAge();
+      break;
+
+    case "category":
+      getModalForCategory();
+      break;
+
+    case "day":
+      getModalForDay();
+      break;
+
+    case "class Type":
+      getModalForClassType();
+      break;
+  }
+}
+
+function clearFilter() {
+  // document.getquerySelectorAll(".active-ageGroup");
+  let flag = document.getElementById("filterModal").getAttribute("data-flag");
+  switch (flag) {
+    case "age":
+      document.querySelectorAll(".active-ageGroup")[0].classList.remove("active-ageGroup");
+      break;
+    case "category":
+      document.querySelectorAll(".form-check-input").forEach((element) => {
+        element.checked = false;
+      });
+      break;
+    case "day":
+      document.querySelectorAll(".form-check-input").forEach((element) => {
+        element.checked = false;
+      });
+      break;
+    case "class Type":
+      document.querySelectorAll(".form-check-input").forEach((element) => {
+        element.checked = false;
+      });
+      break;
+  }
+}
+
+function getModalForAge() {
+  const modalBody = document.getElementById("modal-body");
+  modalBody.innerHTML = `
+  <div class='row g-3'>
+              <div class='col-xl-4 col-lg-6'>
+                <button class='age-filter-btn'>0 - 6 Months</button>
+              </div>
+              <div class='col-xl-4 col-lg-6'>
+                <button class='age-filter-btn'>6 - 12 Months</button>
+              </div>
+              <div class='col-xl-4 col-lg-6'>
+                <button class='age-filter-btn'>12 - 18 Months</button>
+              </div>
+              <div class='col-xl-4 col-lg-6'>
+                <button class='age-filter-btn'>18 - 24 Months</button>
+              </div>
+              <div class='col-xl-4 col-lg-6'>
+                <button class='age-filter-btn'>2 - 4 Years</button>
+              </div>
+              <div class='col-xl-4 col-lg-6'>
+                <button class='age-filter-btn'>4 - 6 Years</button>
+              </div>
+              <div class='col-xl-4 col-lg-6'>
+                <button class='age-filter-btn'>6 - 8 Years</button>
+              </div>
+              <div class='col-xl-4 col-lg-6'>
+                <button class='age-filter-btn'>8 - 10 Years</button>
+              </div>
+              <div class='col-xl-4 col-lg-6'>
+                <button class='age-filter-btn'>10 - 12 Years</button>
+              </div>
+              <div class='col-xl-4 col-lg-6'>
+                <button class='age-filter-btn'>12 - 14 Years</button>
+              </div>
+              <div class='col-xl-4 col-lg-6'>
+                <button class='age-filter-btn'>14 - 16 Years</button>
+              </div>
+              <div class='col-xl-4 col-lg-6'>
+                <button class='age-filter-btn'>&gt;16 Years</button>
+              </div>
+            </div>
+            `;
+  const ageFilterBtn = document.querySelectorAll(".age-filter-btn");
+  ageFilterBtn.forEach(function (button) {
+    button.addEventListener("click", function (e) {
+      if (document.querySelectorAll(".active-ageGroup").length !== 0) {
+        document.querySelectorAll(".active-ageGroup")[0].classList.remove("active-ageGroup");
+      }
+      e.target.classList.add("active-ageGroup");
+    });
+  });
+}
+
+function getModalForCategory() {
+  const modalBody = document.getElementById("modal-body");
+  modalBody.innerHTML = `
+  <div class='row'>
+  <div class='col-6'>
+  <input class='form-check-input' type='checkbox' value='dance' id='dance'>
+  <label class='form-check-label' for='dance'>
+    Dance
+  </label>
+</div>
+<div class='col-6'>
+  <input class='form-check-input' type='checkbox' value='language' id='language'>
+  <label class='form-check-label' for='language'>
+    Language
+  </label>
+</div>
+<div class='col-6'>
+  <input class='form-check-input' type='checkbox' value='writing' id='writing'>
+  <label class='form-check-label' for='writing'>
+    Writing
+  </label>
+</div>
+<div class='col-6'>
+  <input class='form-check-input' type='checkbox' value='music' id='music'>
+  <label class='form-check-label' for='music'>
+    Music
+  </label>
+</div>
+<div class='col-6'>
+  <input class='form-check-input' type='checkbox' value='parentoddler' id='parentoddler'>
+  <label class='form-check-label' for='parentoddler'>
+    Parent Toddler
+  </label>
+</div>
+<div class='col-6'>
+  <input class='form-check-input' type='checkbox' value='storytelling' id='storytelling'>
+  <label class='form-check-label' for='storytelling'>
+    Story Telling
+  </label>
+</div>
+<div class='col-6'>
+  <input class='form-check-input' type='checkbox' value='stem' id='stem'>
+  <label class='form-check-label' for='stem'>
+    STEM
+  </label>
+</div>
+<div class='col-6'>
+  <input class='form-check-input' type='checkbox' value='coding' id='coding'>
+  <label class='form-check-label' for='coding'>
+    Coding
+  </label>
+</div>
+<div class='col-6'>
+  <input class='form-check-input' type='checkbox' value='artsensory' id='artsensory'>
+  <label class='form-check-label' for='artsensory'>
+    Art & Sensory
+  </label>
+</div>
+<div class='col-6'>
+  <input class='form-check-input' type='checkbox' value='phonics' id='phonics'>
+  <label class='form-check-label' for='phonics'>
+    Phonics
+  </label>
+</div>
+<div class='col-6'>
+  <input class='form-check-input' type='checkbox' value='sportsfitness' id='sportsfitness'>
+  <label class='form-check-label' for='sportsfitness'>
+    Sports & Fitness
+  </label>
+</div>
+</div>
+  `;
+}
+
+function getModalForDay() {
+  const modalBody = document.getElementById("modal-body");
+  modalBody.innerHTML = `
+  <div class='row'>
+  <div class='col-6'>
+    <input class='form-check-input' type='checkbox' value='Mon' id='Mon' />
+    <label class='form-check-label' for='Mon'> Monday </label>
+  </div>
+  <div class='col-6'>
+    <input class='form-check-input' type='checkbox' value='Tue' id='Tue' />
+    <label class='form-check-label' for='Tue'> Tuesday </label>
+  </div>
+  <div class='col-6'>
+    <input class='form-check-input' type='checkbox' value='Wed' id='Wed' />
+    <label class='form-check-label' for='Wed'> Wednesday </label>
+  </div>
+  <div class='col-6'>
+    <input class='form-check-input' type='checkbox' value='Thu' id='Thu' />
+    <label class='form-check-label' for='Thu'> Thursday </label>
+  </div>
+  <div class='col-6'>
+    <input class='form-check-input' type='checkbox' value='Fri' id='Fri' />
+    <label class='form-check-label' for='Fri'> Friday </label>
+  </div>
+  <div class='col-6'>
+    <input class='form-check-input' type='checkbox' value='Sat' id='Sat' />
+    <label class='form-check-label' for='Sat'> Saturday </label>
+  </div>
+  <div class='col-6'>
+    <input class='form-check-input' type='checkbox' value='Sun' id='Sun' />
+    <label class='form-check-label' for='Sun'> Sunday </label>
+  </div>
+</div>
+  `;
+}
+
+function getModalForClassType() {
+  const modalBody = document.getElementById("modal-body");
+  modalBody.innerHTML = `
+  <div class='row'>
+  <div class='col-6'>
+    <input class='form-check-input' type='checkbox' value='sessions' id='sessions' />
+    <label class='form-check-label' for='sessions'> Sessions </label>
+  </div>
+  <div class='col-6'>
+    <input class='form-check-input' type='checkbox' value='monthly' id='monthly' />
+    <label class='form-check-label' for='monthly'> Monthly </label>
+  </div>
+  <div class='col-6'>
+    <input class='form-check-input' type='checkbox' value='weekly' id='weekly' />
+    <label class='form-check-label' for='weekly'> Weekly </label>
+  </div>
+  <div class='col-6'>
+    <input class='form-check-input' type='checkbox' value='course' id='course' />
+    <label class='form-check-label' for='course'> Course </label>
+  </div>
+  <div class='col-6'>
+    <input class='form-check-input' type='checkbox' value='quarterly' id='quarterly' />
+    <label class='form-check-label' for='quarterly'> Quarterly </label>
+  </div>
+</div>
+  `;
+}
+
+function capitalize(word) {
+  return word.charAt(0).toUpperCase() + word.slice(1);
+}
+
+function applyFilter() {
+  let flag = document.getElementById("filterModal").getAttribute("data-flag");
+  switch (flag) {
+    case "age":
+      filterWithAge();
+      break;
+
+    case "category":
+      filterWithCategory();
+      break;
+
+    case "day":
+      filterWithDay();
+      break;
+
+    case "class Type":
+      filterWithClassType();
+      break;
+  }
+}
+
+function filterWithAge() {}
+
+function filterWithCategory() {}
+
+function filterWithDay() {}
+
+function filterWithClassType() {}

@@ -88,7 +88,7 @@ let classInfo = [
     className: "Magic Beans Sensory Play",
     address: "Tardeo, Mumbai",
     ageGroupStart: 12,
-    ageGroupEnd: 30,
+    ageGroupEnd: 72,
     days: ["Thu"],
     startDate: "Jun 15, 2023",
     endDate: "Jun 14, 2024",
@@ -282,11 +282,16 @@ let classInfo = [
 ];
 
 $(document).ready(function () {
-  updateList();
+  updateClassList();
 });
 
-function updateList() {
+let ageFilter = [];
+
+function updateClassList() {
+  let filterObj = {};
+  ageFilter.length > 0 ? (filterObj.ageFilter = `${ageFilter[0]}-${ageFilter[1]}`) : (filterObj.ageFilter = ``);
   const classContainer = document.getElementById("classes");
+  classContainer.innerHTML = "";
   classInfo.forEach((element) => {
     let OrgName = element.OrgName;
     let className = element.className;
@@ -300,6 +305,21 @@ function updateList() {
     let classType = element.classType;
     let rating = element.rating;
     let img = element.img;
+
+    debugger;
+    // console.log(filterObj.ageFilter)
+    if (filterObj.ageFilter.length > 0) {
+      let start = parseInt(filterObj.ageFilter.split("-")[0]);
+      let end = parseInt(filterObj.ageFilter.split("-")[1]);
+      // console.log(typeof start, start, typeof end, end);
+      // start >= ageGroupStart?(end <= ageGroupEnd? '': return ):return;
+      // debugger;
+      if ((start >= ageGroupStart && start <= ageGroupEnd) || (end >= ageGroupStart && end <= ageGroupEnd)) {
+        console.log("class printed");
+      } else {
+        return;
+      }
+    }
 
     classContainer.innerHTML += `
         <div class='card mb-3'>
@@ -404,7 +424,7 @@ function clearFilter() {
   let flag = document.getElementById("filterModal").getAttribute("data-flag");
   switch (flag) {
     case "age":
-      document.querySelectorAll(".active-ageGroup")[0].classList.remove("active-ageGroup");
+      document.querySelectorAll(".active-ageGroup").length > 0 ? document.querySelectorAll(".active-ageGroup")[0].classList.remove("active-ageGroup") : "";
       break;
     case "category":
       document.querySelectorAll(".form-check-input").forEach((element) => {
@@ -429,43 +449,51 @@ function getModalForAge() {
   modalBody.innerHTML = `
   <div class='row g-3'>
               <div class='col-xl-4 col-lg-6'>
-                <button class='age-filter-btn'>0 - 6 Months</button>
+              <button data-value='0-6' class='age-filter-btn'>0 - 6 Months</button>
               </div>
               <div class='col-xl-4 col-lg-6'>
-                <button class='age-filter-btn'>6 - 12 Months</button>
+              <button data-value='6-12' class='age-filter-btn'>6 - 12 Months</button>
               </div>
               <div class='col-xl-4 col-lg-6'>
-                <button class='age-filter-btn'>12 - 18 Months</button>
+                <button data-value='12-18' class='age-filter-btn'>12 - 18 Months</button>
+                </div>
+                <div class='col-xl-4 col-lg-6'>
+                <button data-value='18-24' class='age-filter-btn'>18 - 24 Months</button>
+                </div>
+                <div class='col-xl-4 col-lg-6'>
+                <button data-value='24-48' class='age-filter-btn'>2 - 4 Years</button>
+                </div>
+                <div class='col-xl-4 col-lg-6'>
+                <button data-value='48-72' class='age-filter-btn'>4 - 6 Years</button>
+                </div>
+                <div class='col-xl-4 col-lg-6'>
+                <button data-value='72-96' class='age-filter-btn'>6 - 8 Years</button>
+                </div>
+              <div class='col-xl-4 col-lg-6'>
+              <button data-value='96-120' class='age-filter-btn'>8 - 10 Years</button>
               </div>
               <div class='col-xl-4 col-lg-6'>
-                <button class='age-filter-btn'>18 - 24 Months</button>
+                <button data-value='120-144' class='age-filter-btn'>10 - 12 Years</button>
+                </div>
+              <div class='col-xl-4 col-lg-6'>
+              <button data-value='144-168' class='age-filter-btn'>12 - 14 Years</button>
               </div>
               <div class='col-xl-4 col-lg-6'>
-                <button class='age-filter-btn'>2 - 4 Years</button>
+              <button data-value='168-192' class='age-filter-btn'>14 - 16 Years</button>
               </div>
               <div class='col-xl-4 col-lg-6'>
-                <button class='age-filter-btn'>4 - 6 Years</button>
+              <button data-value='193-1200' class='age-filter-btn'>&gt;16 Years</button>
               </div>
-              <div class='col-xl-4 col-lg-6'>
-                <button class='age-filter-btn'>6 - 8 Years</button>
               </div>
-              <div class='col-xl-4 col-lg-6'>
-                <button class='age-filter-btn'>8 - 10 Years</button>
-              </div>
-              <div class='col-xl-4 col-lg-6'>
-                <button class='age-filter-btn'>10 - 12 Years</button>
-              </div>
-              <div class='col-xl-4 col-lg-6'>
-                <button class='age-filter-btn'>12 - 14 Years</button>
-              </div>
-              <div class='col-xl-4 col-lg-6'>
-                <button class='age-filter-btn'>14 - 16 Years</button>
-              </div>
-              <div class='col-xl-4 col-lg-6'>
-                <button class='age-filter-btn'>&gt;16 Years</button>
-              </div>
-            </div>
-            `;
+              `;
+  if (ageFilter.length > 0) {
+    const ageFilterStr = `${ageFilter[0]}-${ageFilter[1]}`;
+    // $('.age-filter-btn').forEach(element => {
+    //   console.log(element);
+    // });
+    $(`[data-value=${ageFilterStr}]`).addClass("active-ageGroup");
+    // console.log($('.age-filter-btn').attr('data-value'));
+  }
   const ageFilterBtn = document.querySelectorAll(".age-filter-btn");
   ageFilterBtn.forEach(function (button) {
     button.addEventListener("click", function (e) {
@@ -640,10 +668,36 @@ function applyFilter() {
   }
 }
 
-function filterWithAge() {}
+function filterWithAge() {
+  if ($(".active-ageGroup").length > 0) {
+    // console.log($(".active-ageGroup")[0].dataset.value.split("-")[0]);
+    let start = $(".active-ageGroup")[0].dataset.value.split("-")[0];
+    let end = $(".active-ageGroup")[0].dataset.value.split("-")[1];
+    ageFilter.push(start);
+    ageFilter.push(end);
+    // debugger;
+    $("#age-filter-btn").attr("data-filter", `${start}-${end}`);
+    $("#agefilter").html(`${getAgeString(start)} - ${getAgeString(end)} <button><i onclick='clearAgeFilter()' class='bi bi-x'></i></button>`);
+    // console.log($("#agefilter"));
+    $("#agefilter").css({ display: "inline-block" });
+    $("#age-filter-btn").css({ "background-color": "#f99e24", color: "white" });
+    $(".btn-close").click();
+    updateClassList();
+  } else {
+    clearAgeFilter();
+  }
+}
 
 function filterWithCategory() {}
 
 function filterWithDay() {}
 
 function filterWithClassType() {}
+
+function clearAgeFilter() {
+  ageFilter = [];
+  $("#agefilter").css({ display: "none" });
+  $("#age-filter-btn").css({ "background-color": "#fff", color: "black" });
+  $("#age-filter-btn").removeAttr("data-filter");
+  updateClassList();
+}

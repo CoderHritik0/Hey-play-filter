@@ -131,6 +131,19 @@ footer {
     margin: 0;
 }
 
+.indviFilter button {
+    padding: 0 5px;
+    border: 1px solid #a1a1a1;
+    border-radius: 15px;
+}
+
+.indviFilter {
+    background-color: #dfdfdf;
+    border: 1px solid black;
+    border-radius: 3px;
+    display: none;
+}
+
 .clear-modal-btn {
     background-color: white;
     width: 100%;

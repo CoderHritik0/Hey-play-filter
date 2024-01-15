@@ -24,7 +24,7 @@
         <div class="content m-3">
           <div class="contain-filter-head d-flex justify-content-between w-100">
             <h5>Filters</h5>
-            <p class="filter-reset">Reset Filters</p>
+            <a href="#" onclick="clearAllFilters()" style="text-decoration: none" class="filter-reset">Reset Filters</a>
           </div>
           <div class="filter-list">
             <button id="age-filter-btn" onclick="updateModal('age')" data-bs-toggle="modal" data-bs-target="#filterModal">Age</button>
@@ -33,16 +33,10 @@
             <button id="classType-filter-btn" onclick="updateModal('class Type')" data-bs-toggle="modal" data-bs-target="#filterModal">Class Type</button>
           </div>
           <div id="appliedFilters" class="mt-3">
-            <div class="indviFilter p-2" id="agefilter"></div>
-            <div class="indviFilter p-2" id="categoryfilter">
-              Dance-language <button><i class="bi bi-x"></i></button>
-            </div>
-            <div class="indviFilter p-2" id="dayfilter">
-              Mon-Tue-Wed <button><i class="bi bi-x"></i></button>
-            </div>
-            <div class="indviFilter p-2" id="classtypefilter">
-              weekly <button><i class="bi bi-x"></i></button>
-            </div>
+            <div class="indviFilter my-1 p-2" id="agefilter"></div>
+            <div class="indviFilter my-1 p-2" id="categoryfilter"></div>
+            <div class="indviFilter my-1 p-2" id="dayfilter"></div>
+            <div class="indviFilter my-1 p-2" id="classtypefilter"></div>
           </div>
           <hr />
           <div class="class-container">
@@ -52,8 +46,8 @@
               </div>
               <!-- <div class="col-sm-6"></div> -->
               <div class="col-sm-6 text-end mt-2">
-                <select name="sorting" id="sortBy" title="sort">
-                  <option value="recommended">Sort by : Recommended</option>
+                <select onChange="updateClassList()" name="sorting" id="sortBy" title="sort">
+                  <option value="">Sort by : Recommended</option>
                   <option value="highest">Sort by : Rating Highest</option>
                   <option value="lowest">Sort by : Rating Lowest</option>
                 </select>

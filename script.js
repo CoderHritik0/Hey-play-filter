@@ -1,3 +1,4 @@
+// Data Array of classes
 let classInfo = [
   {
     OrgName: "Classcapades",
@@ -260,8 +261,8 @@ let classInfo = [
     days: ["Sun"],
     startDate: "Jul 1, 2023",
     endDate: "Jun 30, 2024",
-    categories: ["Sun"],
-    classType: "Sports & Fitness",
+    categories: ["Sports & Fitness"],
+    classType: "Monthly",
     rating: 4,
     img: "19.jpg",
   },
@@ -285,11 +286,17 @@ $(document).ready(function () {
   updateClassList();
 });
 
-let ageFilter = [];
+// Object to store active filters
+let filterObj = {
+  ageFilter: [],
+  catergoryFilter: [],
+  dayFilter: [],
+  classTypeFilter: [],
+};
 
+// Updates List of class
 function updateClassList() {
-  let filterObj = {};
-  ageFilter.length > 0 ? (filterObj.ageFilter = `${ageFilter[0]}-${ageFilter[1]}`) : (filterObj.ageFilter = ``);
+  // ageFilter.length > 0 ? (filterObj.ageFilter = `${ageFilter[0]}-${ageFilter[1]}`) : (filterObj.ageFilter = ``);
   const classContainer = document.getElementById("classes");
   classContainer.innerHTML = "";
   classInfo.forEach((element) => {
@@ -306,17 +313,47 @@ function updateClassList() {
     let rating = element.rating;
     let img = element.img;
 
-    debugger;
-    // console.log(filterObj.ageFilter)
     if (filterObj.ageFilter.length > 0) {
-      let start = parseInt(filterObj.ageFilter.split("-")[0]);
-      let end = parseInt(filterObj.ageFilter.split("-")[1]);
-      // console.log(typeof start, start, typeof end, end);
-      // start >= ageGroupStart?(end <= ageGroupEnd? '': return ):return;
-      // debugger;
+      let start = filterObj.ageFilter[0];
+      let end = filterObj.ageFilter[1];
       if ((start >= ageGroupStart && start <= ageGroupEnd) || (end >= ageGroupStart && end <= ageGroupEnd)) {
-        console.log("class printed");
       } else {
+        return;
+      }
+    }
+
+    if (filterObj.catergoryFilter.length > 0) {
+      let categoryFound = false;
+      filterObj.catergoryFilter.forEach((filter) => {
+        if (categories.includes(filter)) {
+          categoryFound = true;
+        }
+      });
+      if (!categoryFound) {
+        return;
+      }
+    }
+
+    if (filterObj.dayFilter.length > 0) {
+      let dayFound = false;
+      filterObj.dayFilter.forEach((filter) => {
+        if (days.includes(filter)) {
+          dayFound = true;
+        }
+      });
+      if (!dayFound) {
+        return;
+      }
+    }
+
+    if (filterObj.classTypeFilter.length > 0) {
+      let typeFound = false;
+      filterObj.classTypeFilter.forEach((filter) => {
+        if (classType === filter) {
+          typeFound = true;
+        }
+      });
+      if (!typeFound) {
         return;
       }
     }
@@ -359,8 +396,10 @@ function updateClassList() {
               </div>
         `;
   });
+  console.log($("#sortBy").attr("value"));
 }
 
+// Converts array of days to one string
 function getDaysString(daysArray) {
   let dayString = "";
   if (daysArray.length === 1) {
@@ -373,18 +412,21 @@ function getDaysString(daysArray) {
   return dayString;
 }
 
+// Converts number of months into years and months string
 function getAgeString(months) {
   // let ageString = (start / 12 >= 1) ? (start % 12 === 0) ? (` - ${start/12}yrs`) :(` - ${Math.floor(start/12)}yrs ${start%12}Mo` ): ` - ${start%12}Mo`;
   // ageString += (end / 12 >= 1) ? (end % 12 === 0) ? (` - ${end/12}yrs`) :(` - ${Math.floor(end/12)}yrs ${end%12}Mo` ): ` - ${end%12}Mo`;
-  let ageString = months / 12 >= 1 ? (months % 12 === 0 ? ` ${months / 12}yrs` : ` ${Math.floor(months / 12)}yrs ${months % 12}Mo`) : ` ${months % 12}Mo`;
+  let ageString = months / 12 >= 1 ? (months % 12 === 0 ? `${months / 12}yrs` : ` ${Math.floor(months / 12)}yrs ${months % 12}Mo`) : `${months % 12}Mo`;
   return ageString;
 }
 
+// Returns the number of categories if there is more than one category available
 function getCategory(categories) {
   let noOfCategories = categories.length > 1 ? `+${categories.length - 1}` : ``;
   return noOfCategories;
 }
 
+// prints the number of stars as per rating
 function giveRating(stars) {
   let starHtml = "";
   for (let i = 1; i <= 5; i++) {
@@ -397,6 +439,7 @@ function giveRating(stars) {
   return starHtml;
 }
 
+// Triggers after clicking filter modal
 function updateModal(flag) {
   document.getElementById("modalName").innerText = capitalize(flag);
   document.getElementById("filterModal").setAttribute("data-flag", flag);
@@ -419,6 +462,7 @@ function updateModal(flag) {
   }
 }
 
+// Triggers when clear button is clicked from modal
 function clearFilter() {
   // document.getquerySelectorAll(".active-ageGroup");
   let flag = document.getElementById("filterModal").getAttribute("data-flag");
@@ -444,6 +488,7 @@ function clearFilter() {
   }
 }
 
+// Updates modal for age filter
 function getModalForAge() {
   const modalBody = document.getElementById("modal-body");
   modalBody.innerHTML = `
@@ -486,8 +531,8 @@ function getModalForAge() {
               </div>
               </div>
               `;
-  if (ageFilter.length > 0) {
-    const ageFilterStr = `${ageFilter[0]}-${ageFilter[1]}`;
+  if (filterObj.ageFilter.length > 0) {
+    const ageFilterStr = `${filterObj.ageFilter[0]}-${filterObj.ageFilter[1]}`;
     // $('.age-filter-btn').forEach(element => {
     //   console.log(element);
     // });
@@ -505,148 +550,168 @@ function getModalForAge() {
   });
 }
 
+// Updates modal for category filter
 function getModalForCategory() {
   const modalBody = document.getElementById("modal-body");
   modalBody.innerHTML = `
   <div class='row'>
   <div class='col-6'>
-  <input class='form-check-input' type='checkbox' value='dance' id='dance'>
+  <input class='form-check-input' type='checkbox' name='category' value='Dance' id='dance'>
   <label class='form-check-label' for='dance'>
     Dance
   </label>
 </div>
 <div class='col-6'>
-  <input class='form-check-input' type='checkbox' value='language' id='language'>
+  <input class='form-check-input' type='checkbox' name='category' value='Language' id='language'>
   <label class='form-check-label' for='language'>
     Language
   </label>
 </div>
 <div class='col-6'>
-  <input class='form-check-input' type='checkbox' value='writing' id='writing'>
+  <input class='form-check-input' type='checkbox' name='category' value='Writing' id='writing'>
   <label class='form-check-label' for='writing'>
     Writing
   </label>
 </div>
 <div class='col-6'>
-  <input class='form-check-input' type='checkbox' value='music' id='music'>
+  <input class='form-check-input' type='checkbox' name='category' value='Music' id='music'>
   <label class='form-check-label' for='music'>
     Music
   </label>
 </div>
 <div class='col-6'>
-  <input class='form-check-input' type='checkbox' value='parentoddler' id='parentoddler'>
+  <input class='form-check-input' type='checkbox' name='category' value='Parent Toddler' id='parentoddler'>
   <label class='form-check-label' for='parentoddler'>
     Parent Toddler
   </label>
 </div>
 <div class='col-6'>
-  <input class='form-check-input' type='checkbox' value='storytelling' id='storytelling'>
+  <input class='form-check-input' type='checkbox' name='category' value='Story Telling' id='storytelling'>
   <label class='form-check-label' for='storytelling'>
     Story Telling
   </label>
 </div>
 <div class='col-6'>
-  <input class='form-check-input' type='checkbox' value='stem' id='stem'>
+  <input class='form-check-input' type='checkbox' name='category' value='STEM' id='stem'>
   <label class='form-check-label' for='stem'>
     STEM
   </label>
 </div>
 <div class='col-6'>
-  <input class='form-check-input' type='checkbox' value='coding' id='coding'>
+  <input class='form-check-input' type='checkbox' name='category' value='Coding' id='coding'>
   <label class='form-check-label' for='coding'>
     Coding
   </label>
 </div>
 <div class='col-6'>
-  <input class='form-check-input' type='checkbox' value='artsensory' id='artsensory'>
+  <input class='form-check-input' type='checkbox' name='category' value='Art & Sensory' id='artsensory'>
   <label class='form-check-label' for='artsensory'>
     Art & Sensory
   </label>
 </div>
 <div class='col-6'>
-  <input class='form-check-input' type='checkbox' value='phonics' id='phonics'>
+  <input class='form-check-input' type='checkbox' name='category' value='Phonics' id='phonics'>
   <label class='form-check-label' for='phonics'>
     Phonics
   </label>
 </div>
 <div class='col-6'>
-  <input class='form-check-input' type='checkbox' value='sportsfitness' id='sportsfitness'>
+  <input class='form-check-input' type='checkbox' name='category' value='Sports & Fitness' id='sportsfitness'>
   <label class='form-check-label' for='sportsfitness'>
     Sports & Fitness
   </label>
 </div>
 </div>
   `;
+  if (filterObj.catergoryFilter.length > 0) {
+    filterObj.catergoryFilter.forEach((element) => {
+      $(`input[value='${element}']`).attr("checked", "true");
+    });
+  }
 }
 
+// Updates modal for day filter
 function getModalForDay() {
   const modalBody = document.getElementById("modal-body");
   modalBody.innerHTML = `
   <div class='row'>
   <div class='col-6'>
-    <input class='form-check-input' type='checkbox' value='Mon' id='Mon' />
+    <input class='form-check-input' type='checkbox' name='day' value='Mon' id='Mon' />
     <label class='form-check-label' for='Mon'> Monday </label>
   </div>
   <div class='col-6'>
-    <input class='form-check-input' type='checkbox' value='Tue' id='Tue' />
+    <input class='form-check-input' type='checkbox' name='day' value='Tue' id='Tue' />
     <label class='form-check-label' for='Tue'> Tuesday </label>
   </div>
   <div class='col-6'>
-    <input class='form-check-input' type='checkbox' value='Wed' id='Wed' />
+    <input class='form-check-input' type='checkbox' name='day' value='Wed' id='Wed' />
     <label class='form-check-label' for='Wed'> Wednesday </label>
   </div>
   <div class='col-6'>
-    <input class='form-check-input' type='checkbox' value='Thu' id='Thu' />
+    <input class='form-check-input' type='checkbox' name='day' value='Thu' id='Thu' />
     <label class='form-check-label' for='Thu'> Thursday </label>
   </div>
   <div class='col-6'>
-    <input class='form-check-input' type='checkbox' value='Fri' id='Fri' />
+    <input class='form-check-input' type='checkbox' name='day' value='Fri' id='Fri' />
     <label class='form-check-label' for='Fri'> Friday </label>
   </div>
   <div class='col-6'>
-    <input class='form-check-input' type='checkbox' value='Sat' id='Sat' />
+    <input class='form-check-input' type='checkbox' name='day' value='Sat' id='Sat' />
     <label class='form-check-label' for='Sat'> Saturday </label>
   </div>
   <div class='col-6'>
-    <input class='form-check-input' type='checkbox' value='Sun' id='Sun' />
+    <input class='form-check-input' type='checkbox' name='day' value='Sun' id='Sun' />
     <label class='form-check-label' for='Sun'> Sunday </label>
   </div>
 </div>
   `;
+  if (filterObj.dayFilter.length > 0) {
+    filterObj.dayFilter.forEach((element) => {
+      $(`input[value='${element}']`).attr("checked", "true");
+    });
+  }
 }
 
+// Updates modal for class type filter
 function getModalForClassType() {
   const modalBody = document.getElementById("modal-body");
   modalBody.innerHTML = `
   <div class='row'>
   <div class='col-6'>
-    <input class='form-check-input' type='checkbox' value='sessions' id='sessions' />
+    <input class='form-check-input' type='checkbox' name='classType' value='Sessions' id='sessions' />
     <label class='form-check-label' for='sessions'> Sessions </label>
   </div>
   <div class='col-6'>
-    <input class='form-check-input' type='checkbox' value='monthly' id='monthly' />
+    <input class='form-check-input' type='checkbox' name='classType' value='Monthly' id='monthly' />
     <label class='form-check-label' for='monthly'> Monthly </label>
   </div>
   <div class='col-6'>
-    <input class='form-check-input' type='checkbox' value='weekly' id='weekly' />
+    <input class='form-check-input' type='checkbox' name='classType' value='Weekly' id='weekly' />
     <label class='form-check-label' for='weekly'> Weekly </label>
   </div>
   <div class='col-6'>
-    <input class='form-check-input' type='checkbox' value='course' id='course' />
+    <input class='form-check-input' type='checkbox' name='classType' value='Course' id='course' />
     <label class='form-check-label' for='course'> Course </label>
   </div>
   <div class='col-6'>
-    <input class='form-check-input' type='checkbox' value='quarterly' id='quarterly' />
+    <input class='form-check-input' type='checkbox' name='classType' value='Quarterly' id='quarterly' />
     <label class='form-check-label' for='quarterly'> Quarterly </label>
   </div>
 </div>
   `;
+  if (filterObj.classTypeFilter.length > 0) {
+    filterObj.classTypeFilter.forEach((element) => {
+      $(`input[value='${element}']`).attr("checked", "true");
+    });
+  }
 }
 
+// capitalize first letter of word
 function capitalize(word) {
   return word.charAt(0).toUpperCase() + word.slice(1);
 }
 
+// Calls when submit button is clicked from modal
 function applyFilter() {
   let flag = document.getElementById("filterModal").getAttribute("data-flag");
   switch (flag) {
@@ -668,36 +733,129 @@ function applyFilter() {
   }
 }
 
+// Apply Age filter
 function filterWithAge() {
   if ($(".active-ageGroup").length > 0) {
     // console.log($(".active-ageGroup")[0].dataset.value.split("-")[0]);
     let start = $(".active-ageGroup")[0].dataset.value.split("-")[0];
     let end = $(".active-ageGroup")[0].dataset.value.split("-")[1];
-    ageFilter.push(start);
-    ageFilter.push(end);
+    filterObj.ageFilter.push(start);
+    filterObj.ageFilter.push(end);
     // debugger;
     $("#age-filter-btn").attr("data-filter", `${start}-${end}`);
     $("#agefilter").html(`${getAgeString(start)} - ${getAgeString(end)} <button><i onclick='clearAgeFilter()' class='bi bi-x'></i></button>`);
     // console.log($("#agefilter"));
     $("#agefilter").css({ display: "inline-block" });
     $("#age-filter-btn").css({ "background-color": "#f99e24", color: "white" });
-    $(".btn-close").click();
     updateClassList();
   } else {
     clearAgeFilter();
   }
+  $(".btn-close").click();
 }
 
-function filterWithCategory() {}
+// Apply Category filter
+function filterWithCategory() {
+  let categories = $("input[name=category]:checked");
+  $("#categoryfilter").html("");
+  // console.log(categories[0]);
+  if (categories.length > 0) {
+    for (let i = 0; i < categories.length; i++) {
+      const element = categories[i];
+      // console.log(typeof element.value);
+      filterObj.catergoryFilter.push(element.value);
+      document.getElementById("categoryfilter").innerHTML += `${element.value}`;
+      // debugger;
+      document.getElementById("categoryfilter").innerHTML += i === categories.length - 1 ? ` <button><i onclick="clearCategoryFilter()" class="bi bi-x"></i></button>` : "-";
+    }
+    $("#categoryfilter").css({ display: "inline-block" });
+    $("#category-filter-btn").css({ "background-color": "#f99e24", color: "white" });
+    updateClassList();
+  } else {
+    clearCategoryFilter();
+  }
+  $(".btn-close").click();
+}
 
-function filterWithDay() {}
+// Apply Day filter
+function filterWithDay() {
+  // debugger;
+  let days = $("input[name=day]:checked");
+  $("#dayfilter").html("");
+  if (days.length > 0) {
+    for (let i = 0; i < days.length; i++) {
+      const element = days[i];
+      filterObj.dayFilter.push(element.value);
+      document.getElementById("dayfilter").innerHTML += `${element.value}`;
+      // debugger;
+      document.getElementById("dayfilter").innerHTML += i === days.length - 1 ? ` <button><i onclick="clearDayFilter()" class="bi bi-x"></i></button>` : "-";
+    }
+    $("#dayfilter").css({ display: "inline-block" });
+    $("#day-filter-btn").css({ "background-color": "#f99e24", color: "white" });
+    updateClassList();
+  } else {
+    clearDayFilter();
+  }
+  $(".btn-close").click();
+}
 
-function filterWithClassType() {}
+// Apply Class Type filter
+function filterWithClassType() {
+  let classtypes = $("input[name=classType]:checked");
+  $("#classtypefilter").html("");
+  if (classtypes.length > 0) {
+    for (let i = 0; i < classtypes.length; i++) {
+      const element = classtypes[i];
+      filterObj.classTypeFilter.push(element.value);
+      document.getElementById("classtypefilter").innerHTML += `${element.value}`;
+      document.getElementById("classtypefilter").innerHTML += i === classtypes.length - 1 ? ` <button><i onclick="clearClassTypeFilter()" class="bi bi-x"></i></button>` : "-";
+    }
+    $("#classtypefilter").css({ display: "inline-block" });
+    $("#classType-filter-btn").css({ "background-color": "#f99e24", color: "white" });
+    updateClassList();
+  } else {
+    clearDayFilter();
+  }
+  $(".btn-close").click();
+}
 
+// Clears applied age filter
 function clearAgeFilter() {
-  ageFilter = [];
+  filterObj.ageFilter = [];
   $("#agefilter").css({ display: "none" });
   $("#age-filter-btn").css({ "background-color": "#fff", color: "black" });
   $("#age-filter-btn").removeAttr("data-filter");
   updateClassList();
+}
+
+// Clears applied category filter
+function clearCategoryFilter() {
+  filterObj.catergoryFilter = [];
+  $("#categoryfilter").css({ display: "none" });
+  $("#category-filter-btn").css({ "background-color": "#fff", color: "black" });
+  updateClassList();
+}
+
+// Clears applied day filter
+function clearDayFilter() {
+  filterObj.dayFilter = [];
+  $("#dayfilter").css({ display: "none" });
+  $("#day-filter-btn").css({ "background-color": "#fff", color: "black" });
+  updateClassList();
+}
+
+// Clears applied class type filter
+function clearClassTypeFilter() {
+  filterObj.classTypeFilter = [];
+  $("#classtypefilter").css({ display: "none" });
+  $("#classType-filter-btn").css({ "background-color": "#fff", color: "black" });
+  updateClassList();
+}
+
+// Clears all applied filters
+function clearAllFilters() {
+  clearAgeFilter();
+  clearCategoryFilter();
+  clearDayFilter();
+  clearClassTypeFilter();
 }

@@ -299,7 +299,19 @@ function updateClassList() {
   // ageFilter.length > 0 ? (filterObj.ageFilter = `${ageFilter[0]}-${ageFilter[1]}`) : (filterObj.ageFilter = ``);
   const classContainer = document.getElementById("classes");
   classContainer.innerHTML = "";
-  classInfo.forEach((element) => {
+
+  let sortedClassList = classInfo.slice();
+  if ($("#sortBy").val() === "lowest") {
+    sortedClassList.sort((a, b) => {
+      return a.rating - b.rating;
+    });
+  } else if ($("#sortBy").val() === "highest") {
+    sortedClassList.sort((a, b) => {
+      return b.rating - a.rating;
+    });
+  }
+
+  sortedClassList.forEach((element, index) => {
     let OrgName = element.OrgName;
     let className = element.className;
     let address = element.address;
@@ -395,8 +407,9 @@ function updateClassList() {
                 </div>
               </div>
         `;
+    // let pageNo = index + 1 / 10 ? 1 : ;
+    // console.log(index + 1 / 10)
   });
-  console.log($("#sortBy").attr("value"));
 }
 
 // Converts array of days to one string
@@ -814,7 +827,7 @@ function filterWithClassType() {
     $("#classType-filter-btn").css({ "background-color": "#f99e24", color: "white" });
     updateClassList();
   } else {
-    clearDayFilter();
+    clearClassTypeFilter();
   }
   $(".btn-close").click();
 }

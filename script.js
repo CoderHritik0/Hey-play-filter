@@ -281,6 +281,7 @@ let classInfo = [
     img: "20.jpg",
   },
 ];
+let filteredClassList = [];
 
 $(document).ready(function () {
   updateClassList();
@@ -293,25 +294,26 @@ let filterObj = {
   dayFilter: [],
   classTypeFilter: [],
 };
-
-// Updates List of class
-function updateClassList() {
-  // ageFilter.length > 0 ? (filterObj.ageFilter = `${ageFilter[0]}-${ageFilter[1]}`) : (filterObj.ageFilter = ``);
+// let lastClassInfo = [];
+let currPage = 1;
+function printClasses() {
   const classContainer = document.getElementById("classes");
   classContainer.innerHTML = "";
-
-  let sortedClassList = classInfo.slice();
-  if ($("#sortBy").val() === "lowest") {
-    sortedClassList.sort((a, b) => {
-      return a.rating - b.rating;
-    });
-  } else if ($("#sortBy").val() === "highest") {
-    sortedClassList.sort((a, b) => {
-      return b.rating - a.rating;
-    });
+  if(currPage === 1){
+    disabledBtn('prev');
+  }else {
+    enabledBtn('prev');
   }
+  if( currPage*10 >= filteredClassList.length){
+    disabledBtn('next');
+  }else {
+    enabledBtn('next');
+  }
+  // currPage === 1 ? currPage*10 >= filteredClassList.length? disabledBtn('next') disabledBtn('prev') : currPage*10 >= filteredClassList.
+  // let pageNo = 0;
+  for (let i = ((currPage-1)*10); i < Math.min(currPage*10, filteredClassList.length); i++) {
+    const element = filteredClassList[i];
 
-  sortedClassList.forEach((element, index) => {
     let OrgName = element.OrgName;
     let className = element.className;
     let address = element.address;
@@ -324,51 +326,6 @@ function updateClassList() {
     let classType = element.classType;
     let rating = element.rating;
     let img = element.img;
-
-    if (filterObj.ageFilter.length > 0) {
-      let start = filterObj.ageFilter[0];
-      let end = filterObj.ageFilter[1];
-      if ((start >= ageGroupStart && start <= ageGroupEnd) || (end >= ageGroupStart && end <= ageGroupEnd)) {
-      } else {
-        return;
-      }
-    }
-
-    if (filterObj.catergoryFilter.length > 0) {
-      let categoryFound = false;
-      filterObj.catergoryFilter.forEach((filter) => {
-        if (categories.includes(filter)) {
-          categoryFound = true;
-        }
-      });
-      if (!categoryFound) {
-        return;
-      }
-    }
-
-    if (filterObj.dayFilter.length > 0) {
-      let dayFound = false;
-      filterObj.dayFilter.forEach((filter) => {
-        if (days.includes(filter)) {
-          dayFound = true;
-        }
-      });
-      if (!dayFound) {
-        return;
-      }
-    }
-
-    if (filterObj.classTypeFilter.length > 0) {
-      let typeFound = false;
-      filterObj.classTypeFilter.forEach((filter) => {
-        if (classType === filter) {
-          typeFound = true;
-        }
-      });
-      if (!typeFound) {
-        return;
-      }
-    }
 
     classContainer.innerHTML += `
         <div class='card mb-3'>
@@ -407,9 +364,85 @@ function updateClassList() {
                 </div>
               </div>
         `;
-    // let pageNo = index + 1 / 10 ? 1 : ;
-    // console.log(index + 1 / 10)
+    // let cardprinted = i + 1;
+    // // debugger;
+    // // pageNo = (i + 1) % 10 === 0 ? pageNo + 1 : pageNo;
+    // if (cardprinted % 10 === 0) {
+    //   pageNo++;
+    //   $("#nextBtn").attr("nextPage", pageNo);
+    //   $("#prevBtn").attr("prevPage", pageNo - 2);
+    //   break;
+    // } else if (i < lastClassInfo.length) {
+    //   disabledBtn("next");
+    // }
+  }
+  // if (pageNo === 1) {
+  //   disabledBtn("prev");
+  //   enabledBtn("next");
+  // } else {
+  //   enabledBtn("prev");
+  // }
+}
+
+function updateClassList() {
+  currPage = 1;
+  filteredClassList = classInfo.filter((classIndv) => {
+    let ageFilterPass = true;
+    let categoryFilterPass = true;
+    let dayFilterPass = true;
+    let classTypeFilterPass = true;
+
+    if (filterObj.ageFilter.length > 0) {
+      ageFilterPass = false;
+      let start = filterObj.ageFilter[0];
+      let end = filterObj.ageFilter[1];
+      if ((start >= classIndv.ageGroupStart && start <= classIndv.ageGroupEnd) || (end >= classIndv.ageGroupStart && end <= classIndv.ageGroupEnd)) {
+        ageFilterPass = true;
+      }
+    }
+
+    if (filterObj.catergoryFilter.length > 0) {
+      categoryFilterPass = false;
+      filterObj.catergoryFilter.forEach((filter) => {
+        if (classIndv.categories.includes(filter)) {
+          categoryFilterPass = true;
+        }
+      });
+    }
+
+    if (filterObj.dayFilter.length > 0) {
+      dayFilterPass = false;
+      filterObj.dayFilter.forEach((filter) => {
+        if (classIndv.days.includes(filter)) {
+          dayFilterPass = true;
+        }
+      });
+    }
+
+    if (filterObj.classTypeFilter.length > 0) {
+      classTypeFilterPass = false;
+      filterObj.classTypeFilter.forEach((filter) => {
+        if (classIndv.classType === filter) {
+          classTypeFilterPass = true;
+        }
+      });
+    }
+
+    if (ageFilterPass && categoryFilterPass && dayFilterPass && classTypeFilterPass) {
+      return true;
+    }
   });
+  if ($("#sortBy").val() === "lowest") {
+    filteredClassList.sort((a, b) => {
+      return a.rating - b.rating;
+    });
+  } else if ($("#sortBy").val() === "highest") {
+    filteredClassList.sort((a, b) => {
+      return b.rating - a.rating;
+    });
+  }
+
+  printClasses();
 }
 
 // Converts array of days to one string
@@ -545,6 +578,7 @@ function getModalForAge() {
               </div>
               `;
   if (filterObj.ageFilter.length > 0) {
+    // debugger;
     const ageFilterStr = `${filterObj.ageFilter[0]}-${filterObj.ageFilter[1]}`;
     // $('.age-filter-btn').forEach(element => {
     //   console.log(element);
@@ -752,6 +786,7 @@ function filterWithAge() {
     // console.log($(".active-ageGroup")[0].dataset.value.split("-")[0]);
     let start = $(".active-ageGroup")[0].dataset.value.split("-")[0];
     let end = $(".active-ageGroup")[0].dataset.value.split("-")[1];
+    filterObj.ageFilter = [];
     filterObj.ageFilter.push(start);
     filterObj.ageFilter.push(end);
     // debugger;
@@ -773,6 +808,7 @@ function filterWithCategory() {
   $("#categoryfilter").html("");
   // console.log(categories[0]);
   if (categories.length > 0) {
+    filterObj.catergoryFilter = [];
     for (let i = 0; i < categories.length; i++) {
       const element = categories[i];
       // console.log(typeof element.value);
@@ -796,6 +832,7 @@ function filterWithDay() {
   let days = $("input[name=day]:checked");
   $("#dayfilter").html("");
   if (days.length > 0) {
+    filterObj.dayFilter = [];
     for (let i = 0; i < days.length; i++) {
       const element = days[i];
       filterObj.dayFilter.push(element.value);
@@ -817,6 +854,7 @@ function filterWithClassType() {
   let classtypes = $("input[name=classType]:checked");
   $("#classtypefilter").html("");
   if (classtypes.length > 0) {
+    filterObj.classTypeFilter = [];
     for (let i = 0; i < classtypes.length; i++) {
       const element = classtypes[i];
       filterObj.classTypeFilter.push(element.value);
@@ -871,4 +909,43 @@ function clearAllFilters() {
   clearCategoryFilter();
   clearDayFilter();
   clearClassTypeFilter();
+}
+
+// Disables button
+function disabledBtn(button) {
+  if (button === "next") {
+    // console.log('next disabled btn');
+    $("#nextBtn").attr("disabled", "disabled");
+    $("#nextBtn").css("color", "#9b9b9b");
+  } else {
+    // console.log('previous disabled btn');
+    $("#prevBtn").attr("disabled", "disabled");
+    $("#prevBtn").css("color", "#9b9b9b");
+  }
+}
+
+// Enables button
+function enabledBtn(button) {
+  if (button === "next") {
+    // console.log('next enabled btn');
+    $("#nextBtn").removeAttr("disabled");
+    $("#nextBtn").css("color", "orangered");
+  } else {
+    // console.log('previous enabled btn');
+    $("#prevBtn").removeAttr("disabled");
+    $("#prevBtn").css("color", "orangered");
+  }
+}
+
+function nextBtnClicked() {
+  currPage++;
+  printClasses();
+}
+
+function prevBtnClicked() {
+  // let startFrom = $("#prevBtn").attr("prevPage");
+  // startFrom = startFrom * 10;
+  // updateClassList(startFrom);
+  currPage--;
+  printClasses()
 }

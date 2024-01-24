@@ -22,7 +22,7 @@
     <main>
       <div class="d-flex main-content">
         <div class="content m-3">
-          <div class="contain-filter-head d-flex justify-content-between w-100">
+          <div class="contain-filter-head d-flex justify-content-between w-100 pt-5">
             <h5>Filters</h5>
             <a href="#" onclick="clearAllFilters()" style="text-decoration: none" class="filter-reset">Reset Filters</a>
           </div>
@@ -55,8 +55,10 @@
             </div>
             <div id="classes" class="classes my-4"></div>
             <div class="d-flex justify-content-between">
-              <a href="#" onclick="updateClassList()" id="prevBtn" style="text-decoration: none" class="arrow-btn">&larr; Previous</a>
-              <a href="#" onclick="updateClassList()" id="nextBtn" style="text-decoration: none" class="arrow-btn">&rarr; Next</a>
+              <button onclick="prevBtnClicked()" id="prevBtn" class="arrow-btn">&larr; Previous</button>
+              <button onclick="nextBtnClicked()" id="nextBtn" class="arrow-btn">Next &rarr;</button>
+              <!-- <a href="#" onclick="updateClassList()" id="prevBtn" style="text-decoration: none" class="arrow-btn">&larr; Previous</a>
+              <a href="#" onclick="updateClassList()" id="nextBtn" style="text-decoration: none" class="arrow-btn">&rarr; Next</a> -->
             </div>
           </div>
         </div>
